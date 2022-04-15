@@ -16,8 +16,10 @@ namespace SiraUtil.Installers
 
         public override void InstallBindings()
         {
-            Container.BindInstance(_config.FPFCToggle).AsSingle();
             Container.BindInstance(_config.SongControl).AsSingle();
+
+            if (!_config.FPFCToggle.Enabled) return;
+            Container.BindInstance(_config.FPFCToggle).AsSingle();
             Container.BindInterfacesTo<FPFCSettingsController>().AsSingle();
 
             if (Environment.GetCommandLineArgs().Any(a => a.ToLower() == FPFCToggle.Argument))

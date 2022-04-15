@@ -12,6 +12,8 @@ namespace SiraUtil.Tools.FPFC
     {
         public Action<FPFCOptions>? Updated;
 
+        public bool Enabled { get; set; } = true;
+
         public virtual float CameraFOV { get; set; } = 100f;
         public virtual float MoveSensitivity { get; set; } = 3f;
         public virtual float MouseSensitivity { get; set; } = 5f;

@@ -17,13 +17,15 @@ namespace SiraUtil.Installers
         private readonly Zenjector _siraUtil;
         private readonly SiraLogManager _siraLogManager;
         private readonly ZenjectManager _zenjectManager;
+        private readonly Config _config;
         private readonly SiraSyncManager _siraSyncManager;
         private readonly HttpServiceManager _httpServiceManager;
 
-        public SiraInitializationInstaller(Zenjector siraUtil, ZenjectManager zenjectManager)
+        public SiraInitializationInstaller(Zenjector siraUtil, ZenjectManager zenjectManager, Config config)
         {
             _siraUtil = siraUtil;
             _zenjectManager = zenjectManager;
+            _config = config;
             _siraLogManager = new(zenjectManager);
             _httpServiceManager = new(zenjectManager, _siraUtil.Metadata);
             _siraSyncManager = new SiraSyncManager(siraUtil, zenjectManager, _httpServiceManager);
@@ -31,7 +33,8 @@ namespace SiraUtil.Installers
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<FPFCFixDaemon>().AsSingle();
+            if (_config.FPFCToggle.Enabled)
+                Container.BindInterfacesTo<FPFCFixDaemon>().AsSingle();
 
             // Install all UBinders
             foreach (var zenjector in _zenjectManager.ActiveZenjectors)
